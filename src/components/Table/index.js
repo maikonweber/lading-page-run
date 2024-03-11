@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 
-const Table = () => {
+const Table = ({ url }) => {
 
 
     const [data, setData] = useState([{ id: 1, date: '2024-03-10T12:30:00' },
@@ -13,7 +13,7 @@ const Table = () => {
         // Fetch data from your API endpoint
         const fetchData = async () => {
             try {
-                const response = await fetch('YOUR_API_ENDPOINT');
+                const response = await fetch(url);
                 const jsonData = await response.json();
 
 
