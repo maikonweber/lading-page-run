@@ -3,7 +3,6 @@ import Table from "../Table";
 
 const ContainerMain = () => {
   return <div className="flex h-screen bg-gray-200">
-
     <aside className="w-1/4 bg-gray-800 text-white p-4">
       <h2 className="text-2xl font-bold mb-4"> Entrada </h2>
       <AddCaixaButton />
