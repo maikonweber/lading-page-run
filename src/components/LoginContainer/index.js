@@ -10,9 +10,10 @@ const LoginContainer = () => {
     const handleLogin = async () => {
         setLoading(true);
 
+        console.log("Handle Click")
+
         try {
-            // Perform your API request here
-            const response = await fetch('YOUR_LOGIN_API_ENDPOINT', {
+            const response = await fetch('http://localhost:3000/auth/login', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -20,12 +21,15 @@ const LoginContainer = () => {
                 body: JSON.stringify({ username, password }),
             });
 
+            console.log(response)
+
             if (response.ok) {
+                const data = await response.json(); // Extract JSON data from response
+                console.log('Login successful', data);
                 // Handle successful login, e.g., redirect to another page
-                console.log('Login successful');
             } else {
-                // Handle login failure, e.g., show an error message
                 console.error('Login failed');
+                // Handle login failure, e.g., show an error message
             }
         } catch (error) {
             console.error('Error:', error);
