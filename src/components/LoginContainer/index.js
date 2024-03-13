@@ -21,11 +21,12 @@ const LoginContainer = () => {
                 body: JSON.stringify({ username, password }),
             });
 
-            console.log(response)
 
             if (response.ok) {
                 const data = await response.json(); // Extract JSON data from response
                 console.log('Login successful', data);
+                document.cookie = `token=${data.token}; expires=${new Date(data.expiresAt)}; path=/`;
+
                 // Handle successful login, e.g., redirect to another page
             } else {
                 console.error('Login failed');

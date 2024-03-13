@@ -3,29 +3,33 @@
 import React, { useEffect, useState } from 'react';
 
 const Table = ({ url }) => {
+    const [data, setData] = useState([]);
 
-
-    const [data, setData] = useState([{ id: 1, date: '2024-03-10T12:30:00' },
-    { id: 2, date: '2024-03-11T15:45:00' },
-    { id: 3, date: '2024-03-12T09:00:00' },]);
 
     useEffect(() => {
-        // Fetch data from your API endpoint
         const fetchData = async () => {
             try {
-                const response = await fetch(url);
+                // Retrieve the Bearer token from the cookie
+                const token = getCookie('token');
+                console.log(token)
+                // Fetch data from the API endpoint using the token for authorization
+                const response = await fetch(url, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+
                 const jsonData = await response.json();
-
-
-                // setData(simulatedData);
-
+                console.log(jsonData)
+                setData(jsonData.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
         };
 
         fetchData();
-    }, []);
+    }, [url]);
 
     return (
         <div className="container mx-auto mt-8">
@@ -34,13 +38,14 @@ const Table = ({ url }) => {
                     <tr>
                         <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b">ID</th>
                         <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b">Data</th>
+
                     </tr>
                 </thead>
                 <tbody>
                     {data.map((item) => (
                         <tr key={item.id}>
                             <td className="py-2 px-4 border">{item.id}</td>
-                            <td className="py-2 px-4 border">{formatDate(item.date)}</td>
+                            <td className="py-2 px-4 border">{formatDate(item.registre_date)}</td>
                         </tr>
                     ))}
                 </tbody>
@@ -49,6 +54,18 @@ const Table = ({ url }) => {
     );
 
 }
+
+
+const getCookie = (name) => {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName.trim() === name) {
+            return cookieValue;
+        }
+    }
+    return '';
+};
 
 const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
