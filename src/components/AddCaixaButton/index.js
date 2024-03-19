@@ -1,8 +1,9 @@
 // components/AddCaixaButton.js
 "use client"
 import React, { useState } from 'react';
+import Modal from '../Modal';
 
-const AddCaixaButton = ({ user_id }) => {
+const AddCaixaButton = ({ user_id, modal }) => {
     const [loading, setLoading] = useState(false);
 
     const handleAddCaixa = async () => {
@@ -40,7 +41,10 @@ const AddCaixaButton = ({ user_id }) => {
     return (
         <button
             className={`bg-blue-500 text-white px-4 py-2 rounded ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            onClick={handleAddCaixa}
+            onClick={() => {
+                handleAddCaixa()
+                modal()
+            }}
             disabled={loading}
         >
             {loading ? 'Adding...' : 'Add Caixa'}
