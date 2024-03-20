@@ -24,12 +24,12 @@ const ContainerMain = () => {
         <h1 className="text-3xl font-bold mb-4">Entrada</h1>
         <div className="m-3">
           <AddCaixaButton modal={openAddModal} />
-          <Table url="http://localhost:3000/caixa/get-despesa" />
+          <Table url="http://localhost:3032/caixa/get-despesa" />
         </div>
         <h1 className="text-3xl font-bold mb-4">Saída</h1>
         <div className="m-3">
           <AddCaixaButton onClick={openTableModal} modal={openTableModal} />
-          <Table url="http://localhost:3000/caixa/get-despesa" />
+          <Table url="http://localhost:3032/caixa/get-despesa" />
         </div>
       </main>
       {/* Modal para adicionar */}

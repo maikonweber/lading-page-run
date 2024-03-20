@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const Table = ({ url }) => {
     const [data, setData] = useState([]);
+    const router = useRouter();
 
 
     useEffect(() => {
@@ -21,6 +23,10 @@ const Table = ({ url }) => {
 
 
                 const jsonData = await response.json();
+                if (jsonData.statusCode === 403) {
+                    router.push('/login')
+                    console.log(jsonData.statusCode)
+                }
                 console.log(jsonData)
                 setData(jsonData.data);
             } catch (error) {
@@ -29,7 +35,9 @@ const Table = ({ url }) => {
         };
 
         fetchData();
-    }, [url]);
+
+        return
+    }, [url, router]);
 
     return (
         <div className="container mx-auto mt-8">
@@ -37,15 +45,22 @@ const Table = ({ url }) => {
                 <thead>
                     <tr>
                         <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b">ID</th>
-                        <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b">Data</th>
-
+                        <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Data </th>
+                        <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Nome </th>
+                        <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Tipo </th>
+                        <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Valor </th>
+                        <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Modalida </th>
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item) => (
+                    {data?.map((item) => (
                         <tr key={item.id}>
                             <td className="py-2 px-4 border">{item.id}</td>
                             <td className="py-2 px-4 border">{formatDate(item.registre_date)}</td>
+                            <td className="py-2 px-4 border">{item.nome}</td>
+                            <td className="py-2 px-4 border">{item.subtipo}</td>
+                            <td className="py-2 px-4 border">{item.tipo}</td>
+                            <td className="py-2 px-4 border">{item.typo}</td>
                         </tr>
                     ))}
                 </tbody>

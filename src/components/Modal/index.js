@@ -3,11 +3,10 @@ import React, { useState } from 'react';
 
 const Modal = ({ isOpen, onClose }) => {
     const [inputValues, setInputValues] = useState({
-        field1: '',
-        field2: '',
-        field3: '',
-        field4: '',
-        field5: '',
+        nome: '',
+        valor: 0,
+        user_id: '',
+        sub_tipo: '',
         type: 'Despesa', // Valor padrão
     });
 
@@ -19,10 +18,41 @@ const Modal = ({ isOpen, onClose }) => {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // Faça o que desejar com os valores do formulário
         console.log(inputValues);
+
+        setLoading(true);
+
+        const createCaixaDto = {
+            nome: 'Example',
+            typo: 'RECEITA', // Adjust as needed
+            valor: 50.0, // Adjust as needed
+            sub_tipo: 'SubTypeA', // Adjust as needed
+        };
+
+        try {
+            const response = await fetch('YOUR_API_ENDPOINT', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ createCaixaDto, user_id }),
+            });
+
+            if (response.ok) {
+                console.log('Data added successfully');
+                // You can fetch the updated data or perform other actions here
+            } else {
+                console.error('Failed to add data');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setLoading(false);
+        }
+
         onClose(); // Feche o modal após a submissão
     };
 
