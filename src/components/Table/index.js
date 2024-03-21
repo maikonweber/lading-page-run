@@ -45,22 +45,22 @@ const Table = ({ url }) => {
                 <thead>
                     <tr>
                         <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b">ID</th>
-                        <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Data </th>
                         <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Nome </th>
                         <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Tipo </th>
                         <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Valor </th>
                         <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Modalida </th>
+                        <th className="py-2 px-4 bg-gray-800 text-white font-semibold border-b"> Data </th>
                     </tr>
                 </thead>
                 <tbody>
                     {data?.map((item) => (
                         <tr key={item.id}>
                             <td className="py-2 px-4 border">{item.id}</td>
-                            <td className="py-2 px-4 border">{formatDate(item.registre_date)}</td>
                             <td className="py-2 px-4 border">{item.nome}</td>
-                            <td className="py-2 px-4 border">{item.subtipo}</td>
-                            <td className="py-2 px-4 border">{item.tipo}</td>
+                            <td className="py-2 px-4 border">{item.sub_tipo}</td>
+                            <td className="py-2 px-4 border">{item.valor}</td>
                             <td className="py-2 px-4 border">{item.typo}</td>
+                            <td className="py-2 px-4 border">{formatDate(item.registre_date)}</td>
                         </tr>
                     ))}
                 </tbody>

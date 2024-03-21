@@ -1,11 +1,13 @@
 // components/LoginContainer.js
 "use client"
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const LoginContainer = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     const handleLogin = async () => {
         setLoading(true);
@@ -25,8 +27,10 @@ const LoginContainer = () => {
             if (response.ok) {
                 const data = await response.json(); // Extract JSON data from response
                 console.log('Login successful', data);
-                document.cookie = `token=${data.token}; expires=${new Date(data.expiresAt)}; path=/`;
-
+                if (data.token) {
+                    document.cookie = `token=${data.token}; expires=${new Date(data.expiresAt)}; path=/`;
+                    router.push('/finance')
+                }
                 // Handle successful login, e.g., redirect to another page
             } else {
                 console.error('Login failed');

@@ -19,7 +19,7 @@ const ContainerMain = () => {
   const closeTableModal = () => setIsTableModalOpen(false);
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-200">
+    <div className="flex justify-center align-top h-screen bg-gray-200">
       <main className="flex-1 p-4 overflow-hidden">
         <h1 className="text-3xl font-bold mb-4">Entrada</h1>
         <div className="m-3">
