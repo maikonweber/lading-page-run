@@ -1,13 +1,12 @@
-'use client'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const Modal = ({ isOpen, onClose }) => {
+
     const [inputValues, setInputValues] = useState({
         nome: '',
         valor: 0,
-        user_id: '',
         sub_tipo: '',
-        type: 'Despesa', // Valor padrão
+        typo: 'Despesa', // Default value
     });
 
     const handleChange = (e) => {
@@ -18,31 +17,33 @@ const Modal = ({ isOpen, onClose }) => {
         }));
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Faça o que desejar com os valores do formulário
-        console.log(inputValues);
 
-        setLoading(true);
 
-        const createCaixaDto = {
-            nome: 'Example',
-            typo: 'RECEITA', // Adjust as needed
-            valor: 50.0, // Adjust as needed
-            sub_tipo: 'SubTypeA', // Adjust as needed
-        };
+        const { nome, valor, sub_tipo, typo } = inputValues;
+
+        const uppercaseType = typo.toUpperCase()
+
+        const sendeData = { nome, valor, sub_tipo, typo: uppercaseType }
+
+        console.log(getCookie('token'))
 
         try {
-            const response = await fetch('YOUR_API_ENDPOINT', {
+            const response = await fetch('http://localhost:3032/caixa/add-fluxo-caixa', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${getCookie('token')}`, // Assuming you have a function to get token from cookie
                 },
-                body: JSON.stringify({ createCaixaDto, user_id }),
+                body: JSON.stringify(sendeData)
             });
 
             if (response.ok) {
                 console.log('Data added successfully');
+                onPageUpdate();
+                
                 // You can fetch the updated data or perform other actions here
             } else {
                 console.error('Failed to add data');
@@ -50,42 +51,51 @@ const Modal = ({ isOpen, onClose }) => {
         } catch (error) {
             console.error('Error:', error);
         } finally {
-            setLoading(false);
+            onClose(); // Close the modal after submission
         }
-
-        onClose(); // Feche o modal após a submissão
     };
 
+
     return (
-        <div
-            className={`fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-75 ${isOpen ? '' : 'hidden'
-                }`}
-        >
+        <div className={`fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-500 bg-opacity-75 ${isOpen ? '' : 'hidden'}`}>
             <div className="bg-white p-6 rounded-lg w-96">
                 <h2 className="text-lg font-semibold mb-4">Adicionar Transação</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
-                        <label htmlFor="field1" className="block text-sm font-medium text-gray-700">
-                            Campo 1
-                        </label>
+                        <label htmlFor="nome" className="block text-sm font-medium text-gray-700">Nome</label>
                         <input
                             type="text"
-                            id="field1"
-                            name="field1"
-                            value={inputValues.field1}
+                            id="nome"
+                            name="nome"
+                            value={inputValues.nome}
+                            onChange={handleChange}
+                            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        />
+                        <label htmlFor="valor" className="block text-sm font-medium text-gray-700">Valor</label>
+                        <input
+                            type="number"
+                            id="valor"
+                            name="valor"
+                            value={inputValues.valor}
+                            onChange={handleChange}
+                            className="mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        />
+                        <label htmlFor="sub_tipo" className="block text-sm font-medium text-gray-700">Subtipo</label>
+                        <input
+                            type="text"
+                            id="sub_tipo"
+                            name="sub_tipo"
+                            value={inputValues.sub_tipo}
                             onChange={handleChange}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                         />
                     </div>
-                    {/* Repita os blocos acima para os outros campos de texto */}
                     <div className="mb-4">
-                        <label htmlFor="type" className="block text-sm font-medium text-gray-700">
-                            Tipo
-                        </label>
+                        <label htmlFor="type" className="block text-sm font-medium text-gray-700">Tipo</label>
                         <select
                             id="type"
-                            name="type"
-                            value={inputValues.type}
+                            name="typo"
+                            value={inputValues.typo}
                             onChange={handleChange}
                             className="mt-1 p-2 border border-gray-300 rounded-md w-full"
                         >
@@ -112,6 +122,17 @@ const Modal = ({ isOpen, onClose }) => {
             </div>
         </div>
     );
+};
+
+const getCookie = (name) => {
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+        const [cookieName, cookieValue] = cookie.split('=');
+        if (cookieName.trim() === name) {
+            return cookieValue;
+        }
+    }
+    return '';
 };
 
 export default Modal;
